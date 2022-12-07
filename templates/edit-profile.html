@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <title>{{pageTitle}} | Code Scanner</title>
+  </head>
+  <body>
+    <div class="main-screen">
+      <header class="screen-header">
+        <a href="/" class="logo">
+          <img src="/static/imgs/scanner.png" class="logo__img" />
+          <span class="logo__title">Code Scanner</span>
+        </a>
+        <nav class="header__nav-bar">
+          <ul class="nav-bar__icon-list">
+            <li class="nav-bar__icon-item">
+              <a href="/join" class="join">
+                <i class="fa-solid fa-user-plus"></i>
+              </a>
+            </li>
+            <li class="nav-bar__icon-item">
+              <a href="/login" class="sign-in">
+                <i class="fa-solid fa-right-to-bracket"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main class="edit-profile">
+        <form class="edit-profile-form" action="/login">
+          <div class="edit-profile-form__id">
+            <label for="edit-profile-id">ID</label>
+            <input
+              type="text"
+              name="edit-profile-id"
+              id="edit-profile-id"
+              value="TEST"
+              readonly
+              required
+            />
+          </div>
+          <div class="edit-profile-form__pw">
+            <label for="edit-profile-pw">PASSWORD</label>
+            <input
+              type="password"
+              name="edit-profile-pw"
+              id="edit-profile-pw"
+              required
+            />
+          </div>
+          <div class="edit-profile-form__pw-confirm">
+            <label for="edit-profile-confirm">CONFIRM</label>
+            <input
+              type="password"
+              name="edit-profile-confirm"
+              id="edit-profile-confirm"
+              required
+            />
+          </div>
+          <div class="edit-profile-form__username">
+            <label for="edit-profile-username">USERNAME</label>
+            <input
+              type="text"
+              name="edit-profile-username"
+              id="edit-profile-username"
+              required
+            />
+          </div>
+          <div class="edit-profile-form__email">
+            <label for="edit-profile-email">EMAIL</label>
+            <input
+              type="email"
+              name="edit-profile-email"
+              id="edit-profile-email"
+              required
+            />
+          </div>
+
+          <input type="submit" value="수정" />
+        </form>
+      </main>
+    </div>
+    <script src="../static/js/modal.js"></script>
+    <script
+      src="https://kit.fontawesome.com/d1f609d41d.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

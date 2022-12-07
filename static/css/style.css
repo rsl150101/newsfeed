@@ -12,6 +12,7 @@
 @import "../css/screens/home.css";
 @import "../css/screens/join.css";
 @import "../css/screens/login.css";
+@import "../css/screens/edit-profile.css";
 
 html {
   height: 100%;

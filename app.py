@@ -21,6 +21,12 @@ def join():
     return render_template('join.html', pageTitle=page_title)
 
 
+@app.route('/users/<user_id>/edit')
+def edit_profile(user_id):
+    page_title = "Edit Profile"
+    return render_template('edit-profile.html', pageTitle=page_title)
+
+
 if __name__ == '__main__':
     # app.config.from_pyfile("config.py")
     # database = create_engine(app.config['DB_URL'], encoding = 'utf-8', max_overflow = 0)
