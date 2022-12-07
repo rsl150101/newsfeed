@@ -1,5 +1,26 @@
+/* config */
+@import "../css/config/_variables.css";
+@import "../css/config/reset.css";
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,500;1,600;1,700&display=swap");
+
+/* components */
+@import "../css/components/screen-header.css";
+@import "../css/components/main-screen.css";
+@import "../css/components/modal.css";
+
+/* screens */
+@import "../css/screens/home.css";
+
+html {
+  height: 100%;
+  width: 100%;
+}
+
 body {
   height: 100%;
   width: 100%;
-  cursor: url("../imgs/codescan.cur"), pointer;
+  /* cursor: url("../css/config/codescan.cur"), pointer; */
+  /* cursor: url("../css/config/codescan-white.cur"), pointer; */
+  cursor: url("../css/config/codescan-color.cur"), pointer;
+  font-family: "Open Sans", sans-serif;
 }
