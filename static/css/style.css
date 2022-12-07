@@ -11,6 +11,7 @@
 /* screens */
 @import "../css/screens/home.css";
 @import "../css/screens/join.css";
+@import "../css/screens/login.css";
 
 html {
   height: 100%;

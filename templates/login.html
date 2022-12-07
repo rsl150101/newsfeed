@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="../static/css/style.css" />
+    <title>{{pageTitle}} | Code Scanner</title>
+  </head>
+  <body>
+    <div class="main-screen">
+      <header class="screen-header">
+        <a href="/" class="logo">
+          <img src="../static/imgs/scanner.png" class="logo__img" />
+          <span class="logo__title">Code Scanner</span>
+        </a>
+        <nav class="header__nav-bar">
+          <ul class="nav-bar__icon-list">
+            <li class="nav-bar__icon-item">
+              <a href="/join" class="join">
+                <i class="fa-solid fa-user-plus"></i>
+              </a>
+            </li>
+            <li class="nav-bar__icon-item">
+              <a href="/login" class="sign-in">
+                <i class="fa-solid fa-right-to-bracket"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main class="login">
+        <form class="login-form" action="/">
+          <div class="login-form__id">
+            <label for="login-id">ID</label>
+            <input type="text" name="login-id" id="login-id" required />
+          </div>
+          <div class="login-form__pw">
+            <label for="login-pw">PASSWORD</label>
+            <input type="password" name="login-pw" id="login-pw" required />
+          </div>
+
+          <input type="submit" value="로그인" />
+        </form>
+      </main>
+    </div>
+    <script src="../static/js/modal.js"></script>
+    <script
+      src="https://kit.fontawesome.com/d1f609d41d.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>

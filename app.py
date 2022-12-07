@@ -9,6 +9,12 @@ def home():
     return render_template('index.html', pageTitle=page_title)
 
 
+@app.route('/login')
+def login():
+    page_title = "LOGIN"
+    return render_template('login.html', pageTitle=page_title)
+
+
 @app.route('/join')
 def join():
     page_title = "JOIN"
