@@ -27,6 +27,12 @@ def edit_profile(user_id):
     return render_template('edit-profile.html', pageTitle=page_title)
 
 
+@app.route('/questions/<quiz_id>')
+def get_quiz(quiz_id):
+    page_title = f"Question. {quiz_id}"
+    return render_template('question.html', pageTitle=page_title)
+
+
 if __name__ == '__main__':
     # app.config.from_pyfile("config.py")
     # database = create_engine(app.config['DB_URL'], encoding = 'utf-8', max_overflow = 0)

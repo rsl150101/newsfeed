@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="#" />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <title>{{pageTitle}} | Code Scanner</title>
+  </head>
+  <body>
+    <section class="modal">
+      <form class="question-add-form">
+        <label for="question-add-form__title">Explanation Title</label>
+        <input
+          type="text"
+          name="question-add-form__title"
+          id="question-add-form__title"
+          placeholder="제목을 입력하세요."
+          maxlength="50"
+          required
+        />
+        <label for="question-add-form__content">Description</label>
+        <textarea
+          type="text"
+          id="question-add-form__content"
+          name="question-add-form__content"
+          placeholder="설명해주세요!"
+          required
+        ></textarea>
+        <label for="question-add-form__hashtag">Hashtag</label>
+        <input
+          type="text"
+          id="question-add-form__hashtag"
+          name="question-add-form__hashtag"
+          placeholder="Hashtag는 콤마(,)로 구분 됩니다"
+          required
+        />
+        <div class="form-btn-box">
+          <input type="submit" value="Submit" />
+          <input type="button" value="Cancel" />
+        </div>
+      </form>
+    </section>
+    <div class="main-screen">
+      <header class="screen-header">
+        <a href="/" class="logo">
+          <img src="/static/imgs/scanner.png" class="logo__img" />
+          <span class="logo__title">Code Scanner</span>
+        </a>
+        <nav class="header__nav-bar">
+          <ul class="nav-bar__icon-list">
+            <li class="nav-bar__icon-item">
+              <a href="/join" class="join">
+                <i class="fa-solid fa-user-plus"></i>
+              </a>
+            </li>
+            <li class="nav-bar__icon-item">
+              <a href="/login" class="sign-in">
+                <i class="fa-solid fa-right-to-bracket"></i>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </header>
+      <main class="question-main">
+        <p class="description">
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
+          vero in, consectetur, accusantium earum cupiditate temporibus maxime
+          nihil dolor laudantium perspiciatis rem animi quas cumque a at saepe
+          voluptatem officiis!
+        </p>
+        <section class="question">
+          <ul class="question__list">
+            <li class="question-add"><div class="plus-box">+</div></li>
+            <li class="question__item">
+              <a href="#">
+                <span class="question__title">Question. 1</span>
+                <p class="question__content">
+                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                  Eligendi assumenda rem provident. Autem cupiditate possimus
+                  ducimus voluptatibus iste totam vitae ut veritatis sed
+                  repellat, quod, quia ipsum doloribus in doloremque.
+                </p>
+                <span class="question__hashtag">#Algorithm #Sort</span>
+              </a>
+            </li>
+          </ul>
+        </section>
+      </main>
+    </div>
+    <script src="../static/js/modal.js"></script>
+    <script
+      src="https://kit.fontawesome.com/d1f609d41d.js"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
