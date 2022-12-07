@@ -9,6 +9,12 @@ def home():
     return render_template('index.html', pageTitle=page_title)
 
 
+@app.route('/join')
+def join():
+    page_title = "JOIN"
+    return render_template('join.html', pageTitle=page_title)
+
+
 if __name__ == '__main__':
     # app.config.from_pyfile("config.py")
     # database = create_engine(app.config['DB_URL'], encoding = 'utf-8', max_overflow = 0)
