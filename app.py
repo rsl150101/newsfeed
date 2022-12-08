@@ -1,5 +1,6 @@
 import pymysql
 from flask import Flask, render_template, request, flash, session, jsonify, redirect, url_for
+import json
 
 db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
                      port=3306, user='master', passwd='Abcd!234', db='hjdb', charset='utf8')
@@ -79,6 +80,50 @@ def join():
 def edit_profile(user_id):
     page_title = f"#{user_id} EDIT"
     return render_template('edit-profile.html', pageTitle=page_title)
+
+
+@app.route('/questions')
+def get_problems():
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         user='master', db='hjdb', password='Abcd!234', charset='utf8')
+    curs = db.cursor()
+
+    sql = """
+    SELECT *
+    FROM problem
+    """
+
+    curs.execute(sql)
+
+    rows = curs.fetchall()
+    json_str = json.dumps(rows, indent=4, sort_keys=True,
+                          default=str, ensure_ascii=False)
+    db.commit()
+    db.close()
+    return json_str, 200
+
+
+@app.route('/questions', methods=['POST'])
+def save_problems():
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         user='master', db='hjdb', password='Abcd!234', charset='utf8')
+    curs = db.cursor()
+    print(request.form)
+    title = request.form.getlist('question-add-form__title')[0]
+    comment = request.form.getlist('question-add-form__content')[0]
+    user_unique_id = session['_id']
+
+    sql = """insert into problem (problem_title, problem_comment, user_unique_id)
+         values (%s,%s,%s)
+        """
+    curs.execute(sql, (title, comment, user_unique_id))
+
+    # # # rows = curs.fetchall()
+
+    # # # json_str = json.dumps(rows, indent=4, sort_keys=True, default=str)
+    db.commit()
+    db.close()
+    return redirect(url_for("home"))
 
 
 @app.route('/questions/<quiz_id>')
