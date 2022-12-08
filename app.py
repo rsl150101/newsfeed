@@ -76,6 +76,66 @@ def join():
     return render_template('join.html', pageTitle=page_title)
 
 
+@app.route('/join', methods=['POST'])
+def signup():
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         port=3306, user='master', passwd='Abcd!234', db='hjdb', charset='utf8')
+    cursor = db.cursor()
+
+    details = request.form
+    user_id = details.getlist('join-id')[0]
+    user_pw = details.getlist('join-pw')[0]
+    pw_confirm = details.getlist('join-confirm')[0]
+    name = details.getlist('join-username')[0]
+    email = details.getlist('join-email')[0]
+    sql = """
+            SELECT * FROM users
+            where user_id = (%s)
+    """
+    cursor.execute(sql, user_id)
+    id_check_result = cursor.fetchone()
+    if id_check_result != None:
+        db.commit()
+        db.close()
+        flash("이미 가입된 아이디입니다. 다른 아이디를 선택하세요.")
+        return render_template('register.html')
+    else:
+        sql = """
+            SELECT * FROM users
+            where email = (%s)
+        """
+        cursor.execute(sql, email)
+        email_check_result = cursor.fetchone()
+        if email_check_result != None:
+            db.commit()
+            db.close()
+            flash("이미 가입된 이메일 입니다.")
+            return render_template('register.html')
+        elif user_pw == pw_confirm:
+            sql = """
+                INSERT INTO
+                users(
+                    user_id
+                    , user_pawward
+                    , user_name
+                    , email
+                    )
+                    VALUES
+                    (%s, %s, %s, %s)
+            """
+            cursor.execute(sql, (user_id, user_pw, name, email))
+            db.commit()
+            db.close()
+            flash("회원가입이 완료되었습니다.")
+            return redirect(url_for('login'))
+        else:
+            db.commit()
+            db.close()
+            flash("비밀번호 확인이 일치하지 않습니다.")
+            return render_template('register.html')
+    # return redirect(url_for('login'))
+
+
 @app.route('/users/<user_id>/edit')
 def edit_profile(user_id):
     page_title = f"#{user_id} EDIT"

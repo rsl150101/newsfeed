@@ -6,6 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="../static/css/style.css" />
+    {%with messages = get_flashed_messages()%} {%if messages %}
+    <script type="text/javascript">
+      alert("{{messages[-1]}}");
+    </script>
+    {%endif%} {%endwith%}
     <title>{{pageTitle}} | Code Scanner</title>
   </head>
   <body>
@@ -31,7 +36,7 @@
         </nav>
       </header>
       <main class="join">
-        <form class="join-form" action="/login">
+        <form class="join-form" method="post">
           <div class="join-form__id">
             <label for="join-id">ID</label>
             <input type="text" name="join-id" id="join-id" required />
