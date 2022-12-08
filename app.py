@@ -394,6 +394,130 @@ def update_review():
     db.close()  # 닫기
     return jsonify({'msg': '수정완료!'})
 
+
+@app.route('/questions/<quiz_id>/explanations/<ex_id>')
+def get_explanation(quiz_id, ex_id):
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         user='master', password='Abcd!234', db="hjdb", port=3306)
+    cursor = db.cursor()
+    sql = """
+        SELECT review_title, review_comment
+        FROM review
+        WHERE problem_id = %s;
+        """
+    cursor.execute(sql, (quiz_id))
+    rows = cursor.fetchall()
+
+    json_str = json.dumps(rows, indent=4, sort_keys=True,
+                          default=str, ensure_ascii=False)
+
+    db.commit()
+    db.close()
+
+    review_title = json.loads(json_str)[0][0]
+    review_comment = json.loads(json_str)[0][1]
+
+    return render_template("explanation.html", quizId=quiz_id, exId=ex_id, reviewTitle=review_title, reviewComment=review_comment)
+
+
+@app.route('/questions/<quiz_id>/explanations/<ex_id>/comment')
+def get_comment(quiz_id, ex_id):
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         user='master', password='Abcd!234', db="hjdb", port=3306)
+    cursor = db.cursor()
+    sql = """
+        SELECT comment_title, comment_content, user_unique_id
+        FROM comment
+        WHERE %s = problem_id and %s = review_id;
+        """
+    cursor.execute(sql, (quiz_id, ex_id))
+    rows = cursor.fetchall()
+
+    json_str = json.dumps(rows, indent=4, sort_keys=True,
+                          default=str, ensure_ascii=False)
+
+    db.commit()
+    db.close()
+    return json_str, 200
+
+# 문제의 풀이의 코멘트
+# 모달창으로 통해서 코멘트 타이틀, 코멘트 콘텐츠
+# 세션을 이용해 유저의 고유 번호
+
+
+@app.route("/questions/<quiz_id>/explanations/<ex_id>/comment", methods=["POST"])
+def post_comment(quiz_id, ex_id):
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         user='master', password='Abcd!234', db="hjdb", port=3306)
+    cursor = db.cursor()
+
+    # 모달이 폼 형태 post request.
+    print(request.form)
+
+    comment_title = request.form.getlist('question-add-form__title')[0]
+    comment_content = request.form.getlist('question-add-form__content')[0]
+
+    print(session['_id'])
+
+    sql = """insert into comment (comment_title,comment_content, user_unique_id, problem_id, review_id) values (%s,%s,%s,%s,%s)"""
+    cursor.execute(sql, (comment_title, comment_content,
+                   session['_id'], quiz_id, ex_id))
+
+    db.commit()
+    db.close()
+    return redirect(f"/questions/{quiz_id}/explanations/{ex_id}")
+
+
+# @app.route("/questions/<quiz_id>/explanations/<ex_id>/comment/<int:comment_id>", methods=["PATCH"])
+# def patch_comment(quiz_id, ex_id, comment_id):  # 변수가 필요한가요?
+#     db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+#                          user='master', password='Abcd!234', db="hjdb", port=3306)
+#     cursor = db.cursor()
+
+#     # GET 메소드를 제거했습니다
+#     # sql = """
+#     # SELECT comment_title, comment_content
+#     # FROM comment
+#     # WHERE %s = problem_id and %s = review_id;
+#     # """
+#     ##cursor.execute(sql, (quiz_id, ex_id))
+#     ##rows = cursor.fetchall()
+
+#     # json_str = json.dumps(rows, indent=4, sort_keys=True,
+#     # default=str, ensure_ascii=False)
+
+#     # db.commit()
+#     # db.close()
+
+#     # if request.method == "PATCH":
+#     comment_title = request.get_json().get("comment_title")
+#     comment_content = request.get_json().get("comment_content")
+
+#     sql = """UPDATE comment set comment_content = %s, comment_title = %s
+#     where comment_id = %s, user_unique_id = %s, problem_id = %s, review_id = %s"""
+#     cursor.execute(sql, (comment_content, comment_title,
+#                    comment_id, session['_id'], quiz_id, ex_id))
+#     db.commit()
+#     db.close()
+
+#     return redirect(url_for("get_comment"))
+
+
+# @app.route('/questions/<quiz_id>/explanations/<ex_id>/comment', methods=["DELETE"])
+# def delete_comment(quiz_id, ex_id, comment_id):
+#     db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+#                          user='master', password='Abcd!234', db="hjdb", port=3306)
+#     cursor = db.cursor()
+
+#     comment_id = request.form["comment_id"]
+#     sql = "DELETE from comment where comment_id = %s, user_unique_id = %s, problem_id = %s, review_id = %s;"
+#     cursor.execute(sql, (comment_id, session['_id'], quiz_id, ex_id))
+
+#     db.commit()
+#     db.close()
+#     return redirect(url_for("get_comment"))
+
+
 if __name__ == '__main__':
 
     app.run('0.0.0.0', port=5000, debug=True)
