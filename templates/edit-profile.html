@@ -18,13 +18,13 @@
         <nav class="header__nav-bar">
           <ul class="nav-bar__icon-list">
             <li class="nav-bar__icon-item">
-              <a href="/join" class="join">
-                <i class="fa-solid fa-user-plus"></i>
+              <a href="/users/{{session['_id']}}/edit" class="edit-profile-a">
+                <i class="fa-solid fa-user"></i>
               </a>
             </li>
             <li class="nav-bar__icon-item">
-              <a href="/login" class="sign-in">
-                <i class="fa-solid fa-right-to-bracket"></i>
+              <a href="/logout" class="sign-out">
+                <i class="fa-solid fa-right-from-bracket"></i>
               </a>
             </li>
           </ul>
