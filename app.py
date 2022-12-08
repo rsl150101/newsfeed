@@ -137,10 +137,119 @@ def signup():
     # return redirect(url_for('login'))
 
 
+@app.route('/users/<user_id>')
+def profile(user_id):
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         port=3306, user='master', passwd='Abcd!234', db='hjdb', charset='utf8')
+    cursor = db.cursor()
+    user_id = session['user_id']
+    sql = """
+        SELECT user_id, user_name, email FROM users
+        where user_id = (%s)
+    """
+    cursor.execute(sql, user_id)
+    result = cursor.fetchone()
+    db.commit()
+    db.close()
+    user_name = result[1]
+    user_email = result[2]
+    page_title = f'#user_id Profile'
+
+    return render_template('profile.html', userId=user_id, username=user_name, userEmail=user_email, pageTitle=page_title)
+
+
 @app.route('/users/<user_id>/edit')
 def edit_profile(user_id):
-    page_title = f"#{user_id} EDIT"
-    return render_template('edit-profile.html', pageTitle=page_title)
+    page_title = f"#{user_id} Edit"
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         port=3306, user='master', passwd='Abcd!234', db='hjdb', charset='utf8')
+    cursor = db.cursor()
+    user_id = session['user_id']
+    sql = """
+        SELECT user_id, user_name, email FROM users
+        where user_id = (%s)
+    """
+    cursor.execute(sql, user_id)
+    result = cursor.fetchone()
+    db.commit()
+    db.close()
+    user_name = result[1]
+    user_email = result[2]
+    return render_template('edit-profile.html', userId=user_id, username=user_name, userEmail=user_email, pageTitle=page_title)
+
+
+@app.route('/users/<user_id>/edit', methods=['POST'])
+def update_profile(user_id):
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         port=3306, user='master', passwd='Abcd!234', db='hjdb', charset='utf8')
+    cursor = db.cursor()
+    user_id = session['user_id']
+    print(user_id)
+    sql = """
+        SELECT user_id, user_name, email FROM users
+        where user_id = (%s)
+    """
+    cursor.execute(sql, user_id)
+    result = cursor.fetchone()
+    db.commit()
+    db.close()
+
+    user_name = result[1]
+    user_email = result[2]
+
+    details = request.form
+    print(details)
+    user_name_form = details.getlist('edit-profile-username')[0]
+    user_pw_form = details.getlist('edit-profile-pw')[0]
+    pw_confirm = details.getlist('edit-profile-confirm')[0]
+
+    if user_pw_form == pw_confirm:
+        db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                             port=3306, user='master', passwd='Abcd!234', db='hjdb', charset='utf8')
+        cursor = db.cursor()
+        sql = """
+            UPDATE users
+            SET user_name = (%s), user_pawward = (%s)
+            WHERE user_id = (%s)
+        """
+        cursor.execute(sql, (user_name_form, user_pw_form, user_id))
+
+        sql = """
+                SELECT user_id, user_name, email FROM users
+                where user_id = (%s)
+            """
+        cursor.execute(sql, user_id)
+        result = cursor.fetchone()
+        db.commit()
+        db.close()
+        user_name = result[1]
+        user_email = result[2]
+        flash("변경되었습니다!")
+        return redirect("/")
+    else:
+        flash("새 비밀번호와 비밀번호 확인이 일치하지 않습니다")
+
+    return render_template('edit-profile.html', userId=user_id, username=user_name, userEmail=user_email)
+
+
+@app.route('/users/<user_id>/delete')
+def delete_user(user_id):
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com',
+                         port=3306, user='master', passwd='Abcd!234', db='hjdb', charset='utf8')
+    cursor = db.cursor()
+    user_id = session['user_id']
+
+    sql = """
+        DELETE FROM users
+        WHERE user_id = (%s)
+    """
+    cursor.execute(sql, (user_id))
+    db.commit()
+    db.close()
+    session['login_flag'] = False
+    session['user_id'] = ""
+    flash("탈퇴되었습니다!")
+    return redirect("/")
 
 
 @app.route('/questions')
@@ -233,11 +342,11 @@ def insert_review_post():
     curs = db.cursor()
 
     data = request.form
-    problem_id = data.getlist('question-add-form__hashtag')[0][-1]
+    problem_id = data.getlist(
+        'question-add-form__hashtag')[0].split("Question No. ")[1]
     review_title = data.getlist('question-add-form__title')
     review_comment = data.getlist('question-add-form__content')
     user_id = session['_id']
-
     sql = """insert into review (
                                                  problem_id,
                                                  review_title,

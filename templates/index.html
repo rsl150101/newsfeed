@@ -12,6 +12,7 @@
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+
     <script>
       $(document).ready(function () {
         get_problems();
@@ -124,7 +125,7 @@
           <ul class="nav-bar__icon-list">
             {% if session.get('login_flag') %}
             <li class="nav-bar__icon-item">
-              <a href="/users/{{session['_id']}}/edit" class="edit-profile-a">
+              <a href="/users/{{session['_id']}}" class="profile-icon">
                 <i class="fa-solid fa-user"></i>
               </a>
             </li>
