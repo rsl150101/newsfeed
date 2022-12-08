@@ -5,13 +5,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="#" />
-    <link rel="stylesheet" href="/static/css/style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
       integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
       crossorigin="anonymous"
     ></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+    <link rel="stylesheet" href="/static/css/style.css" />
     <script>
       $(document).ready(function () {
         show_problem_review();
@@ -47,10 +48,67 @@
                 </p>
                 <span class="question__hashtag"></span>
               </a>
+              <button onclick="del_review(${id})"  type="button"style="background-color: wheat;border-radius: 30px;border: unset;outline: unset;" class="btn btn-dark" id="darkbtn">삭제</button>
+                <button onclick="up_review(${id})"  type="button"style="background-color: wheat;border-radius: 30px;border: unset;outline: unset;" class="btn btn-dark" id="darkbtn">수정</button>
+            </li>
             </li>
                `;
               $(".question__list").append(temp_html);
             }
+          },
+        });
+      }
+      function del_review(id) {
+        //id 번째 지울꺼야 if문으로 review_id의 user_id와 user의 userid가 같으면 지워,수정
+        let review_id = id;
+        $.ajax({
+          type: "DELETE",
+          url: "/review",
+          data: { review_id_give: review_id },
+          success: function (response) {
+            window.location.reload();
+            alert("삭제완료");
+          },
+        });
+      }
+
+      async function up_review(id) {
+        const { value: ipAddress } = await Swal.fire({
+          title: "제목수정",
+          input: "text",
+          inputLabel: "",
+          showCancelButton: true,
+          inputValidator: (value) => {
+            if (!value) {
+              return "You need to write something!";
+            }
+          },
+        });
+
+        let title = ipAddress;
+        const { value: text } = await Swal.fire({
+          input: "textarea",
+          inputLabel: "Message",
+          inputPlaceholder: "내용수정",
+          inputAttributes: {
+            "aria-label": "Type your message here",
+          },
+          showCancelButton: true,
+        });
+        let comment = text;
+
+        let review_id = id;
+        $.ajax({
+          type: "UPDATE",
+          url: "/review",
+          data: {
+            review_title_give: title,
+            review_comment_give: comment,
+            review_id_give: review_id,
+          },
+          success: function (response) {
+            alert(response["msg"]);
+            window.location.reload();
           },
         });
       }
@@ -98,6 +156,19 @@
         </a>
         <nav class="header__nav-bar">
           <ul class="nav-bar__icon-list">
+            {% if session.get('login_flag') %}
+            <li class="nav-bar__icon-item">
+              <a href="/users/{{session['_id']}}/edit" class="edit-profile-a">
+                <i class="fa-solid fa-user-pen"></i>
+              </a>
+            </li>
+            <li class="nav-bar__icon-item">
+              <a href="/logout" class="sign-out">
+                <i class="fa-solid fa-right-from-bracket"></i>
+              </a>
+            </li>
+
+            {% else %}
             <li class="nav-bar__icon-item">
               <a href="/join" class="join">
                 <i class="fa-solid fa-user-plus"></i>
@@ -108,6 +179,7 @@
                 <i class="fa-solid fa-right-to-bracket"></i>
               </a>
             </li>
+            {% endif %}
           </ul>
         </nav>
       </header>
@@ -115,12 +187,15 @@
         <p class="description"></p>
         <section class="question">
           <ul class="question__list">
+            {% if session.get('login_flag') %}
             <li class="question-add"><div class="plus-box">+</div></li>
+            {% endif %}
           </ul>
         </section>
       </main>
     </div>
     <script src="../static/js/modal.js"></script>
+
     <script
       src="https://kit.fontawesome.com/d1f609d41d.js"
       crossorigin="anonymous"

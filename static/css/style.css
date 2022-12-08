@@ -1,19 +1,20 @@
 /* config */
-@import "../css/config/_variables.css";
-@import "../css/config/reset.css";
+@import "/static/css/config/_variables.css";
+@import "/static/css/config/reset.css";
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@1,500;1,600;1,700&display=swap");
 
 /* components */
-@import "../css/components/screen-header.css";
-@import "../css/components/main-screen.css";
-@import "../css/components/modal.css";
+@import "/static/css/components/screen-header.css";
+@import "/static/css/components/main-screen.css";
+@import "/static/css/components/modal.css";
 
 /* screens */
-@import "../css/screens/home.css";
-@import "../css/screens/join.css";
-@import "../css/screens/login.css";
-@import "../css/screens/edit-profile.css";
-@import "../css/screens/question.css";
+@import "/static/css/screens/home.css";
+@import "/static/css/screens/join.css";
+@import "/static/css/screens/login.css";
+@import "/static/css/screens/edit-profile.css";
+@import "/static/css/screens/question.css";
+@import "/static/css/screens/explanation.css";
 
 html {
   height: 100%;
@@ -27,4 +28,8 @@ body {
   /* cursor: url("../css/config/codescan-white.cur"), pointer; */
   cursor: url("../css/config/codescan-color.cur"), pointer;
   font-family: "Open Sans", sans-serif;
+}
+
+body.swal2-height-auto {
+  height: 100% !important;
 }

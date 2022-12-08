@@ -165,7 +165,9 @@
         </form>
         <section class="question">
           <ul class="question__list">
+            {% if session.get('login_flag') %}
             <li class="question-add"><div class="plus-box">+</div></li>
+            {% endif %}
             <!-- <li class="question__item">
               <a href="#">
                 <span class="question__title">Question. 1</span>

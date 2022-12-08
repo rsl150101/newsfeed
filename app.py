@@ -50,6 +50,7 @@ def signin():
             session['login_flag'] = True
             session['user_id'] = user_id
             session['_id'] = user_in_db[0]
+
             message = "{}님 환영합니다!".format(user_name)
             flash(message)
             db.commit()
@@ -249,6 +250,40 @@ def insert_review_post():
     db.close()  # 닫기
     return redirect(f"/questions/{problem_id}")
 
+
+@app.route('/review', methods=['DELETE'])
+def delete_review():
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com', user='master', password='Abcd!234',
+                         db="hjdb", port=3306)
+    curs = db.cursor()
+    review_id_receive = request.form.get('review_id_give')
+    print(review_id_receive)
+    print(type(review_id_receive))
+    sql = """ delete from review where review_id = (%s);"""
+    curs.execute(sql, review_id_receive)
+
+    db.commit()  # 확정
+    db.close()  # 닫기
+    return jsonify({'msg': '삭제완료!'})
+
+
+@app.route('/review', methods=['UPDATE'])
+def update_review():
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com', user='master', password='Abcd!234',
+                         db="hjdb", port=3306)
+    curs = db.cursor()
+    review_id_receive = request.form.get(
+        'review_id_give')  # id 번째 title, comment 를 받아와서 바꿔
+    review_title_receive = request.form.get('review_title_give')
+    review_comment_receive = request.form.get('review_comment_give')
+    print(review_comment_receive, review_title_receive)
+    sql = """ update review set review_title = (%s), review_comment = (%s) where review_id = (%s);"""
+    curs.execute(sql, (review_title_receive,
+                 review_comment_receive, review_id_receive))
+
+    db.commit()  # 확정
+    db.close()  # 닫기
+    return jsonify({'msg': '수정완료!'})
 
 if __name__ == '__main__':
 
