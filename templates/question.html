@@ -6,11 +6,60 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="/static/css/style.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(document).ready(function () {
+        show_problem_review();
+      });
+
+      function show_problem_review() {
+        let problem_id = "{{ quizId }}";
+        $(".description").text("{{ quizContent }}");
+        $.ajax({
+          type: "GET",
+          url: "/review",
+          data: { problem_id_give: problem_id }, //전달할데이터
+          dataType: "json", //전달받을 data타입
+          success: function (response) {
+            // console.log(response[0]);
+            // let problem_title = response[0][0]; //review_id
+            // let problem_comment = response[0][1]; //review_id
+            // let tempp_html = `
+            //                 <div>${problem_title}</div>
+            //                 <div>${problem_comment}</div>`;
+            // $("#problem").append(tempp_html);
+            for (let i = 0; i < response.length; i++) {
+              let id = response[i][3]; //review_id
+              let title = response[i][4]; //title
+              let comment = response[i][5]; //comment
+              // localStorage.setItem('json', JSON.stringify({review_id: id}))
+              let temp_html = `
+              <li class="question__item">
+              <a href="/questions/${problem_id}/explanations/${id}">
+                <span class="question__title">Explanation. ${title}</span>
+                <p class="question__content">
+                  ${comment}
+                </p>
+                <span class="question__hashtag"></span>
+              </a>
+            </li>
+               `;
+              $(".question__list").append(temp_html);
+            }
+          },
+        });
+      }
+    </script>
     <title>{{pageTitle}} | Code Scanner</title>
   </head>
   <body>
     <section class="modal">
-      <form class="question-add-form">
+      <form class="question-add-form" method="post" action="/review">
         <label for="question-add-form__title">Explanation Title</label>
         <input
           type="text"
@@ -64,27 +113,10 @@
         </nav>
       </header>
       <main class="question-main">
-        <p class="description">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Reprehenderit
-          vero in, consectetur, accusantium earum cupiditate temporibus maxime
-          nihil dolor laudantium perspiciatis rem animi quas cumque a at saepe
-          voluptatem officiis!
-        </p>
+        <p class="description"></p>
         <section class="question">
           <ul class="question__list">
             <li class="question-add"><div class="plus-box">+</div></li>
-            <li class="question__item">
-              <a href="#">
-                <span class="question__title">Question. 1</span>
-                <p class="question__content">
-                  Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                  Eligendi assumenda rem provident. Autem cupiditate possimus
-                  ducimus voluptatibus iste totam vitae ut veritatis sed
-                  repellat, quod, quia ipsum doloribus in doloremque.
-                </p>
-                <span class="question__hashtag">#Algorithm #Sort</span>
-              </a>
-            </li>
           </ul>
         </section>
       </main>

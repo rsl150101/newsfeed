@@ -189,7 +189,66 @@ def save_problems():
 @app.route('/questions/<quiz_id>')
 def get_quiz(quiz_id):
     page_title = f"Question. {quiz_id}"
-    return render_template('question.html', pageTitle=page_title)
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com', user='master', password='Abcd!234',
+                         db="hjdb", port=3306)
+    curs = db.cursor()
+    sql = """
+    select p.problem_comment from problem as p 
+    where p.problem_id =(%s)  """
+    curs.execute(sql, quiz_id)
+    rows = curs.fetchall()
+
+    return render_template('question.html', pageTitle=page_title, quizId=quiz_id, quizContent=rows[0][0])
+
+
+@app.route('/review')
+def get_problem():
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com', user='master', password='Abcd!234',
+                         db="hjdb", port=3306)
+    curs = db.cursor()
+
+    problem_id = int(request.args.get('problem_id_give'))
+
+    sql = """
+    select p.problem_id, p.problem_title , p.problem_comment,r.review_id,r.review_title,r.review_comment 
+    from review as r 
+    inner join problem as p 
+    on r.problem_id = p.problem_id 
+    where p.problem_id =(%s)  """
+    curs.execute(sql, problem_id)
+    rows = curs.fetchall()
+
+    json_str = json.dumps(rows, indent=4, sort_keys=True,
+                          default=str, ensure_ascii=False)
+    db.commit()
+    db.close()
+    return json_str, 200
+
+
+@app.route('/review', methods=['POST'])
+def insert_review_post():
+    db = pymysql.connect(host='hjdb.cmux79u98wpg.us-east-1.rds.amazonaws.com', user='master', password='Abcd!234',
+                         db="hjdb", port=3306)
+    curs = db.cursor()
+
+    data = request.form
+    problem_id = data.getlist('')
+    review_title = data.getlist('question-add-form__title')
+    review_comment = data.getlist('question-add-form__content')
+    user_id = session['_id']
+    print(data)
+
+    sql = """insert into review (
+                                                 problem_id,
+                                                 review_title,
+                                                 review_comment,
+                                                 user_unique_id)
+                                             values (%s,%s,%s,%s)"""
+    curs.execute(sql, (problem_id, review_title, review_comment, user_id))
+
+    db.commit()  # 확정
+    db.close()  # 닫기
+    return 'insert success', 200
 
 
 if __name__ == '__main__':

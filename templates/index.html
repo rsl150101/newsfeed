@@ -23,6 +23,7 @@
           data: {},
           success: function (response) {
             let doc = JSON.parse(response);
+            console.log(doc);
             for (let i = 0; i < doc.length; i++) {
               let title = doc[i][1];
               let content = doc[i][2];
