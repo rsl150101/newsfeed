@@ -77,13 +77,12 @@
           placeholder="설명해주세요!"
           required
         ></textarea>
-        <label for="question-add-form__hashtag">Hashtag</label>
         <input
           type="text"
           id="question-add-form__hashtag"
           name="question-add-form__hashtag"
-          placeholder="Hashtag는 콤마(,)로 구분 됩니다"
-          required
+          value="Question No. {{ quizId }}"
+          readonly
         />
         <div class="form-btn-box">
           <input type="submit" value="Submit" />

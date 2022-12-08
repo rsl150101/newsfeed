@@ -232,11 +232,10 @@ def insert_review_post():
     curs = db.cursor()
 
     data = request.form
-    problem_id = data.getlist('')
+    problem_id = data.getlist('question-add-form__hashtag')[0][-1]
     review_title = data.getlist('question-add-form__title')
     review_comment = data.getlist('question-add-form__content')
     user_id = session['_id']
-    print(data)
 
     sql = """insert into review (
                                                  problem_id,
@@ -248,7 +247,7 @@ def insert_review_post():
 
     db.commit()  # 확정
     db.close()  # 닫기
-    return 'insert success', 200
+    return redirect(f"/questions/{problem_id}")
 
 
 if __name__ == '__main__':
